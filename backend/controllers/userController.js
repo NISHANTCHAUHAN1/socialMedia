@@ -11,8 +11,8 @@ export const register = async(req,res) => {
         if(!username || !email || !password)
             return res.status(400).json({message: "Something is missing, please check!"});
 
-        const otherUser = await User.findOne({email});
-        if(otherUser) return res.status(400).json({message: "Already have an account with this email"});
+        const user = await User.findOne({email});
+        if(user) return res.status(400).json({message: "Already have an account with this email"});
 
         const hashPassword = await bcrypt.hash(password, 10);
         await User.create({
@@ -33,31 +33,31 @@ export const login = async(req,res) => {
     if(!email || !password) 
         return res.status(400).json({message: "Something is missing, please check!"});
 
-    let otherUser = await User.findOne({email});
-    if(!otherUser) return res.status(400).json({message: "Incorrect email or password"});
+    let user = await User.findOne({email});
+    if(!user) return res.status(400).json({message: "Incorrect email or password"});
 
-    const comparePassword = await bcrypt.compare(password, otherUser.password);
+    const comparePassword = await bcrypt.compare(password, user.password);
     if(!comparePassword) return res.status(400).json({message: "Incorrect email or password"});
 
-    const token = await jwt.sign({userId: otherUser._id}, process.env.SEC_KEY, {
+    const token = await jwt.sign({userId: user._id}, process.env.SEC_KEY, {
         expiresIn: "15d",
     });
 
-    otherUser = {
-        _id: otherUser._id,
-        username: otherUser.username,
-        email: otherUser.email,
-        profilePicture: otherUser.profilePicture,
-        bio: otherUser.bio,
-        followers: otherUser.followers,
-        following: otherUser.following,
+    user = {
+        _id: user._id,
+        username: user.username,
+        email: user.email,
+        profilePicture: user.profilePicture,
+        bio: user.bio,
+        followers: user.followers,
+        following: user.following,
     }
 
     return res.cookie("token", token, {
         maxAge: 15 * 24 * 60 * 60 * 1000,
         httpOnly: true,
         sameSite: "strict"
-    }).json({otherUser, message: `Welcome back ${otherUser.username}`});
+    }).json({user, message: `Welcome back ${user.username}`});
 
    } catch (error) {
         res.status(500).json({message: "Invaild server error"});
@@ -75,8 +75,8 @@ export const logout = async(_,res) => {
 export const getProfile = async(req,res)  => {
     try {
         const userId = req.params.id;
-        let otherUser = await User.findById(userId).select('-password');
-        return res.status(200).json({otherUser});
+        let user = await User.findById(userId).select('-password');
+        return res.status(200).json({user});
     } catch (error) {
         res.status(500).json({message: "Invaild server error"});
     }
@@ -94,16 +94,16 @@ export const editProfile = async(req,res) => {
             cloudResponse = await cloudinary.uploader.upload(fileUri);
         }
 
-        const otherUser = await User.findById(userId).select('-password');
-        if(!otherUser) return res.status(400).json({ message: 'User not found.'});
+        const user = await User.findById(userId).select('-password');
+        if(!user) return res.status(400).json({ message: 'User not found.'});
 
-        if(bio) otherUser.bio = bio;
-        if(gender) otherUser.gender = gender;
-        if(profilePicture) otherUser.profilePicture  = cloudResponse.secure_url;
+        if(bio) user.bio = bio;
+        if(gender) user.gender = gender;
+        if(profilePicture) user.profilePicture  = cloudResponse.secure_url;
 
-        await otherUser.save();
+        await user.save();
 
-        return res.status(200).json({ message: 'Profile updated.', otherUser});
+        return res.status(200).json({ message: 'Profile updated.', user});
     } catch (error) {
         res.status(500).json({message: "Invaild server error"});
     }
