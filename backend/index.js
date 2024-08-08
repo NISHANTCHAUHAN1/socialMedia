@@ -5,12 +5,9 @@ import connectDB from './utils/db.js';
 import dotenv from 'dotenv';
 
 dotenv.config({});
+const PORT = process.env.PORT || 8000;
 
 const app = express();
-
-app.get('/', (req,res) => {
-    res.send("hello nish from backend");
-})
 
 //middleware
 app.use(express.json());
@@ -23,9 +20,9 @@ const corsOptions = {
 }
 app.use(cors(corsOptions));
 
+import userRoute from './routes/userRoute.js';
 
-
-const PORT = 8000;
+app.use("/api/v1/user", userRoute);
 
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
