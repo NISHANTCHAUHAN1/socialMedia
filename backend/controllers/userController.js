@@ -3,9 +3,9 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import cloudinary from "../utils/cloudinary.js";
 import getDataUri from "../utils/datauri.js";
+import { Post } from "../model/postModel.js";
 
 export const register = async(req,res) => {
-
     try {
         const {username, email, password} = req.body;
         if(!username || !email || !password)
@@ -43,6 +43,16 @@ export const login = async(req,res) => {
         expiresIn: "15d",
     });
 
+    const populatedPosts = await Promise.all(
+        user.posts.map( async(postId) => {
+            const post = await Post.findById(postId);
+            if(post.author.equals(user._id)){
+                return post;
+            }
+            return null;
+        })
+    )
+
     user = {
         _id: user._id,
         username: user.username,
@@ -51,6 +61,7 @@ export const login = async(req,res) => {
         bio: user.bio,
         followers: user.followers,
         following: user.following,
+        posts: populatedPosts
     }
 
     return res.cookie("token", token, {

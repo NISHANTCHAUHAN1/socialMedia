@@ -6,7 +6,6 @@ import dotenv from 'dotenv';
 
 dotenv.config({});
 const PORT = process.env.PORT || 8000;
-
 const app = express();
 
 //middleware
@@ -21,10 +20,15 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 import userRoute from './routes/userRoute.js';
+import postRoute from './routes/postRoute.js';
+import messageRoute from './routes/messageRoute.js';
 
 app.use("/api/v1/user", userRoute);
+app.use("/api/v1/post", postRoute);
+app.use("/api/v1/message", messageRoute);
+
 
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
     connectDB();
-})
+});
