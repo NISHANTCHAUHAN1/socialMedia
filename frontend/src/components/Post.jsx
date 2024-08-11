@@ -6,7 +6,7 @@ import { Button } from "./ui/button";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 import CommentDialog from "./CommentDialog";
 
-const Post = () => {
+const Post = ({post}) => {
   const [text, setText] = useState("");
   const [open, setOpen] = useState(false);
 
@@ -24,10 +24,10 @@ const Post = () => {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Avatar>
-            <AvatarImage src="" alt="post_image" />
+            <AvatarImage src={post.author?.profilePicture} alt="post_image" />
             <AvatarFallback>CN</AvatarFallback>
           </Avatar>
-          <h1>username</h1>
+          <h1>{post.author?.username}</h1>
         </div>
         <Dialog>
           <DialogTrigger asChild>
@@ -48,8 +48,8 @@ const Post = () => {
       </div>
       <img
         className="rounded-sm my-2 w-full aspect-square object-cover"
-        src="https://images.unsplash.com/photo-1590658165737-15a047b7c0b0?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cGl4ZWx8ZW58MHx8MHx8fDA%3D"
-        alt=""
+        src={post.image}
+        alt="img-post"
       />
 
         <div className="flex items-center justify-between my-2">
@@ -60,10 +60,10 @@ const Post = () => {
           </div>
           <Bookmark className="cursor-pointer hover:text-gray-600" />
         </div>
-        <span className="font-medium block mb-2">1k Likes</span>
+        <span className="font-medium block mb-2">{post.likes.length} likes</span>
         <p>
-          <span className="font-medium mr-2">username</span>
-          caption
+          <span className="font-medium mr-2">{post.author?.username}</span>
+          {post.caption}
         </p>
         <span onClick={() => setOpen(true)} className="cursor-pointer text-gray-600" >View all 10 comments</span>
         <CommentDialog open={open} setOpen={setOpen} />
