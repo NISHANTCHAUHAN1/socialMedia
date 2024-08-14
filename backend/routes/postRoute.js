@@ -8,12 +8,12 @@ const router = express.Router();
 router.post("/addpost", isAuth, upload.single('image'), addNewPost);
 router.get("/getallpost",isAuth, getAllPost);
 router.get("/userpost/all", isAuth, getUserPost);
-router.get("/like/:id", isAuth, likePost);
-router.get("/dislike/:id", isAuth, dislikePost);
-router.post("/comment/:id",isAuth, addComment);
-router.get("/comment/all/:id",isAuth, getCommentsOfPost);
+router.get("/:id/like", isAuth, likePost);
+router.get("/:id/dislike", isAuth, dislikePost);
+router.post("/:id/comment",isAuth, addComment);
+router.get("/:id/comment/all",isAuth, getCommentsOfPost);
 router.delete("/delete/:id", isAuth, deletePost);
-router.get("/bookmark/:id",isAuth, bookmarkPost);
+router.get("/:id/bookmark",isAuth, bookmarkPost);
 
 
 export default router;

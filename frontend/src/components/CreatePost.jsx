@@ -7,6 +7,8 @@ import { readFileAsDataURL } from "@/lib/utils";
 import { toast } from "sonner";
 import axios from "axios";
 import { Loader2 } from "lucide-react";
+import { useDispatch, useSelector } from "react-redux";
+import { setPosts } from "@/redux/postSlice";
 
 const CreatePost = ({ open, setOpen }) => {
   const imageRef = useRef();
@@ -14,6 +16,12 @@ const CreatePost = ({ open, setOpen }) => {
   const [caption, setCaption] = useState("");
   const [imgPrev, setImgprev] = useState("");
   const [loading, setLoading] = useState(false);
+
+
+  const dispatch = useDispatch();
+
+  const {user} = useSelector(store => store.auth);
+  const {posts} = useSelector(store => store.post);
 
   const fileChangeHandler = async (e) => {
     const file = e.target.files?.[0];
@@ -43,7 +51,9 @@ const CreatePost = ({ open, setOpen }) => {
         }
       );
       if (res.data) {
+        dispatch(setPosts([res.data.post, ...posts]));
         toast.success(res.data.message);
+        setOpen(false);
       }
     } catch (error) {
       toast.error(error.response.data.message);
@@ -59,11 +69,11 @@ const CreatePost = ({ open, setOpen }) => {
         </DialogHeader>
         <div className="flex gap-3 items-center">
           <Avatar>
-            <AvatarImage src="" alt="img" />
+            <AvatarImage src={user?.profilePicture} alt="img" />
             <AvatarFallback>CN</AvatarFallback>
           </Avatar>
           <div>
-            <h1 className="font-semibold text-xs">Username</h1>
+            <h1 className="font-semibold text-xs">{user?.username}</h1>
             <span className="text-gray-600 text-xs">Bio here...</span>
           </div>
         </div>
@@ -109,18 +119,6 @@ const CreatePost = ({ open, setOpen }) => {
               Post
             </Button>
           ))}
-        {/* {
-          imgPrev && (
-            loading ? (
-              <Button>
-                <Loader2 className='mr-2 h-4 w-4 animate-spin' />
-                Please wait
-              </Button>
-            ) : (
-              <Button onClick={createPostHandler} type="submit" className="w-full">Post</Button>
-            )
-          )
-        } */}
       </DialogContent>
     </Dialog>
   );
