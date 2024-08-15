@@ -43,10 +43,16 @@ const LeftSidebar = () => {
   const sidebarHandler = (itemText) => {
     if (itemText === "Logout") {
       logoutHandler();
-    } else if (itemText === "Create") {
+    } 
+    else if (itemText === "Create") {
       setOpen(true);
     }
-    // alert(itemText)
+    else if (itemText === "Profile") {
+      navigate(`/profile/${user._id}`);
+    }
+    else if (itemText === "Home") {
+      navigate(`/`);
+    }
   };
   const sidebarItems = [
     { icon: <Home />, text: "Home" },

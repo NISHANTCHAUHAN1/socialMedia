@@ -4,11 +4,11 @@ import { useSelector } from "react-redux";
 
 const Posts = () => {
   const { posts } = useSelector((store) => store.post);
-  useEffect(() => {
-    fetch(`http://localhost:8000/api/v1/post/getallpost`).then ((res) =>  res.json()).then(res => console.log(res));
-    // console.log();
+  // useEffect(() => {
+  //   fetch(`http://localhost:8000/api/v1/post/getallpost`).then ((res) =>  res.json()).then(res => console.log(res));
+  //   // console.log();
     
-  },[])
+  // },[])
   
   return (
     <div>

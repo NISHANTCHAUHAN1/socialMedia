@@ -8,9 +8,9 @@ const router = express.Router();
 router.post("/register", register);
 router.post("/login", login);
 router.get("/logout", logout);
-router.get("/profile/:id", isAuth, getProfile);
+router.get("/:id/profile", isAuth, getProfile);
 router.post("/profile/edit", isAuth, upload.single('profilePicture'),editProfile);
 router.get("/suggested", isAuth, getSuggestedUsers);
-router.post("/followorunfollow/:id", isAuth, followOrUnfollow);
+router.post("/:id/followorunfollow", isAuth, followOrUnfollow);
 
 export default router;

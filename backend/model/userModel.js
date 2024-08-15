@@ -41,13 +41,13 @@ const userSchema = new mongoose.Schema({
   posts: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "post",
+      ref: "Post",
     },
   ],
   bookmarks: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "post",
+      ref: "Post",
     },
   ],
 },{timestamps: true });

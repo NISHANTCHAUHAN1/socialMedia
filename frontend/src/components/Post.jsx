@@ -139,14 +139,6 @@ const Post = ({ post }) => {
                 Delete
               </Button>
             )}
-
-            {/* <Button
-                onClick={deletePostHandler}
-                variant="ghost"
-                className="cursor-pointer w-fit"
-              >
-                Delete
-              </Button> */}
           </DialogContent>
         </Dialog>
       </div>
