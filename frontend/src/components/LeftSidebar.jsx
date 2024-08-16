@@ -53,6 +53,9 @@ const LeftSidebar = () => {
     else if (itemText === "Home") {
       navigate(`/`);
     }
+    else if (itemText === "Message") {
+      navigate(`/chat`);
+    }
   };
   const sidebarItems = [
     { icon: <Home />, text: "Home" },
