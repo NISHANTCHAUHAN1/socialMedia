@@ -3,10 +3,11 @@ import cors from 'cors';
 import cookieParser from "cookie-parser";
 import connectDB from './utils/db.js';
 import dotenv from 'dotenv';
+import { app, server } from "./socket/socket.js"
 
 dotenv.config({});
 const PORT = process.env.PORT || 8000;
-const app = express();
+// const app = express();
 
 //middleware
 app.use(express.json());
@@ -28,7 +29,7 @@ app.use("/api/v1/post", postRoute);
 app.use("/api/v1/message", messageRoute);
 
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
     connectDB();
 });

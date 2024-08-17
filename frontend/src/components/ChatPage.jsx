@@ -1,18 +1,42 @@
-import React from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { setSelestedUser } from "@/redux/authSlice";
-import { MessageCircleCode } from "lucide-react";
-import { Input } from "./ui/input";
-import { Button } from "./ui/button";
-import Messages from "./Messages";
+import { Input } from './ui/input';
+import { Button } from './ui/button';
+import { MessageCircleCode } from 'lucide-react';
+import Messages from './Messages';
+import axios from 'axios';
+import { setMessages } from '@/redux/chatSlice';
 
 const ChatPage = () => {
-  const { user, suggestedUsers, selectedUser } = useSelector(
-    (store) => store.auth
-  );
-  const isOnline = true;
-  const dispatch = useDispatch();
+    const [textMessage, setTextMessage] = useState("");
+    const { user, suggestedUsers, selectedUser } = useSelector(store => store.auth);
+    const { onlineUsers, messages } = useSelector(store => store.chat);
+    const dispatch = useDispatch();
+
+    const sendMessageHandler = async (receiverId) => {
+        try {
+            const res = await axios.post(`http://localhost:8000/api/v1/message/send/${receiverId}`, { textMessage }, {
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                withCredentials: true
+            });
+            if (res.data.success) {
+                dispatch(setMessages([...messages, res.data.newMessage]));
+                setTextMessage("");
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    useEffect(() => {
+        return () => {
+            dispatch(setSelestedUser(null));
+        }
+    },[]);
 
   return (
     <div className="flex ml-[16%] h-screen">
@@ -20,9 +44,10 @@ const ChatPage = () => {
         <h1 className="font-bold mb-4 px-3 text-xl">{user?.username}</h1>
         <hr className="mb-4 border-gray-300" />
         <div className="overflow-y-auto h-[80vh]">
-          {suggestedUsers.map((suggestedUser) => {
+          {suggestedUsers.map((suggestedUser,index) => {
+            const isOnline = onlineUsers.includes(suggestedUser?._id);
             return (
-              <div
+              <div key={index}
                 onClick={() => dispatch(setSelestedUser(suggestedUser))}
                 className="flex gap-3 items-center p-3 hover:bg-gray-100 cursor-pointer"
               >
@@ -59,8 +84,18 @@ const ChatPage = () => {
           </div>
           <Messages selectedUser={selectedUser} />
           <div className="flex items-center p-4 border-t border-t-gray-300">
-            <Input type="texr" className='flex-1 mr-2 focus-visible:ring-transparent' placeholder="Messages..." />
-            <Button className="">Send</Button>
+            <Input
+              value={textMessage}
+              onChange={(e) => setTextMessage(e.target.value)}
+              type="text"
+              className="flex-1 mr-2 focus-visible:ring-transparent"
+              placeholder="Messages..."
+            />
+            <Button
+              onClick={() => sendMessageHandler(selectedUser?._id)}
+            >
+              Send
+            </Button>
           </div>
         </section>
       ) : (
