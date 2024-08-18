@@ -6,6 +6,8 @@ import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
 import { AtSign, Heart, MessageCircle } from "lucide-react";
+import axios from "axios";
+import { toast } from "sonner";
 
 const Profile = () => {
   const params = useParams();
@@ -20,6 +22,7 @@ const Profile = () => {
   const tabHandleChange = (tab) => {
     setActiveTab(tab)
   }
+
 
   const displayPost = activeTab === "posts" ? userProfile?.posts : userProfile?.bookmarks;
   return (
