@@ -21,12 +21,12 @@ io.on('connection', (socket) => {
     const userId = socket.handshake.query.userId;
     if(userId) {
         userSocketMap[userId] = socket.id;
-        console.log(`User connected: userId = ${userId}, SockerkId = ${socket.id}`); 
+        // console.log(`User connected: userId = ${userId}, SockerkId = ${socket.id}`); 
     }
     io.emit('getOnlineUsers', Object.keys(userSocketMap));
     socket.on('disconnect', () => {
         if(userId) {
-            console.log(`User connected: userId = ${userId}, SockerkId = ${socket.id}`); 
+            // console.log(`User connected: userId = ${userId}, SockerkId = ${socket.id}`); 
             delete userSocketMap[userId];
         }
         io.emit('getOnlineUsers', Object.keys(userSocketMap));
@@ -34,3 +34,6 @@ io.on('connection', (socket) => {
 })
 
 export {app, server, io};
+
+
+

@@ -89,7 +89,7 @@ export const likePost = async(req,res) => {
             const postOwnerSocketId = getReceiverSocketId(postOwnerId);
             io.to(postOwnerSocketId).emit('notification', notification);
         }
-
+    
         return res.status(200).json({message: 'Post Liked'});
     } catch (error) {
         res.status(500).json({message: "Invaild server error"});
