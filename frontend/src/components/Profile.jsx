@@ -6,8 +6,6 @@ import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
 import { AtSign, Heart, MessageCircle } from "lucide-react";
-import axios from "axios";
-import { toast } from "sonner";
 
 const Profile = () => {
   const params = useParams();

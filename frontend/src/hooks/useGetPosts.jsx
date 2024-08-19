@@ -8,7 +8,7 @@ const useGetPosts = () => {
   useEffect(() => {
     const fetchAllPost = async () => {
       try {
-        const res = await axios.get("http://localhost:8000/api/v1/post/getallpost", {withCredentials: true});
+        const res = await axios.get("https://socialmedia-kcjq.onrender.com/api/v1/post/getallpost", {withCredentials: true});
         if (res.data) {
         //   console.log(res.data.posts);
           dispatch(setPosts(res.data.posts));
