@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Dialog, DialogContent, DialogTrigger } from './ui/dialog'
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
 import { Link } from 'react-router-dom'
-import { MoreHorizontal } from 'lucide-react'
+// import { MoreHorizontal } from 'lucide-react'
 import { Button } from './ui/button'
 import { useDispatch, useSelector } from 'react-redux'
 import Comment from './Comment'
@@ -13,6 +13,7 @@ import { setPosts } from '@/redux/postSlice'
 const CommentDialog = ({ open, setOpen }) => {
   const [text, setText] = useState("");
   const { selectedPost, posts } = useSelector(store => store.post);
+  const { user } = useSelector(store => store.auth)
   const [comment, setComment] = useState([]);
   const dispatch = useDispatch();
 
@@ -71,19 +72,18 @@ const CommentDialog = ({ open, setOpen }) => {
           <div className='w-1/2 flex flex-col justify-between'>
             <div className='flex items-center justify-between p-4'>
               <div className='flex gap-3 items-center'>
-                <Link>
+                <Link to={`/profile/${user?._id}`}>
                   <Avatar>
                     <AvatarImage src={selectedPost?.author?.profilePicture} />
                     <AvatarFallback>CN</AvatarFallback>
                   </Avatar>
                 </Link>
                 <div>
-                  <Link className='font-semibold text-xs'>{selectedPost?.author?.username}</Link>
-                  {/* <span className='text-gray-600 text-sm'>Bio here...</span> */}
+                  <Link to={`/profile/${user?._id}`} className='font-semibold text-xs'>{selectedPost?.author?.username}</Link>
                 </div>
               </div>
 
-              <Dialog>
+              {/* <Dialog>
                 <DialogTrigger asChild>
                   <MoreHorizontal className='cursor-pointer' />
                 </DialogTrigger>
@@ -95,7 +95,7 @@ const CommentDialog = ({ open, setOpen }) => {
                     Add to favorites
                   </div>
                 </DialogContent>
-              </Dialog>
+              </Dialog> */}
             </div>
             <hr />
             <div className='flex-1 overflow-y-auto max-h-96 p-4'>

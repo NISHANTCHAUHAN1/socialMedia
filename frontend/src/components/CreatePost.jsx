@@ -9,6 +9,7 @@ import axios from "axios";
 import { Loader2 } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { setPosts } from "@/redux/postSlice";
+import { Link } from "react-router-dom";
 
 const CreatePost = ({ open, setOpen }) => {
   const imageRef = useRef();
@@ -41,7 +42,7 @@ const CreatePost = ({ open, setOpen }) => {
     try {
       setLoading(true);
       const res = await axios.post(
-        "http://localhost:8000/api/v1/post/addpost",
+        "https://socialmedia-kcjq.onrender.com/api/v1/post/addpost",
         formData,
         {
           headers: {
@@ -68,12 +69,14 @@ const CreatePost = ({ open, setOpen }) => {
           Create New Post
         </DialogHeader>
         <div className="flex gap-3 items-center">
+          <Link to={`/profile/${user?._id}`}>
           <Avatar>
-            <AvatarImage src={user?.profilePicture} alt="img" />
+            <AvatarImage src={user?.profilePicture} alt="post_image" />
             <AvatarFallback>CN</AvatarFallback>
           </Avatar>
+        </Link>
           <div>
-            <h1 className="font-semibold text-xs">{user?.username}</h1>
+            <h1 className="font-semibold text-xs"><Link to={`/profile/${user?._id}`}>{user?.username}</Link></h1>
             <span className="text-gray-600 text-xs">Bio here...</span>
           </div>
         </div>
